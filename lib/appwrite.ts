@@ -49,7 +49,20 @@ export const createUser = async ({ email, password, name }: CreateUserParams) =>
 
 export const signIn = async ({ email, password }: SignInParams) => {
     try {
+        try {
+            // Try to get current session and delete it if it exists
+            const currentSession = await account.getSession('current');
+            if (currentSession) {
+                await account.deleteSession(currentSession.$id);
+            }
+        } catch (sessionError) {
+            // If there's no active session, this will throw an error, which we can ignore
+            console.log('No active session to delete');
+        }
+
+        // Create a new session
         const session = await account.createEmailPasswordSession(email, password);
+        return session;
     } catch (e) {
         throw new Error(e as string);
     }
@@ -72,6 +85,17 @@ export const getCurrentUser = async () => {
         return currentUser.documents[0];
     } catch (e) {
         console.log(e);
+        throw new Error(e as string);
+    }
+}
+
+export const logout = async () => {
+    try {
+        // Delete the current session
+        await account.deleteSession('current');
+        return { success: true };
+    } catch (e) {
+        console.log('Logout error:', e);
         throw new Error(e as string);
     }
 }
