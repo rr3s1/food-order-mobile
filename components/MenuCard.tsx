@@ -1,11 +1,14 @@
 import {Image, Platform, Text, TouchableOpacity} from "react-native";
 import {MenuItem} from "@/type";
 import {appwriteConfig} from "@/lib/appwrite";
+import { useCartStore } from "@/store/cart.store";
 
 // This component displays a single menu item card.
 const MenuCard = ({ item }: { item: MenuItem }) => {
     // Destructure properties from the item prop for easy access.
-    const { imageUrl, name, price } = item;
+    // Use correct property names from MenuItem type
+    const { imageUrl, name, price, id, customizations } = item as any;
+    const addItem = useCartStore((state: any) => state.addItem);
 
     // Construct the full image URL by appending the Appwrite project ID.
     // This is required for Appwrite to serve the image.
@@ -38,7 +41,13 @@ const MenuCard = ({ item }: { item: MenuItem }) => {
             </Text>
 
             {/* "Add to Cart" button, another touchable element. */}
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => addItem({
+                id,
+                name,
+                price,
+                image_url: imageUrl,
+                customizations: customizations || [],
+            })}>
                 <Text className="paragraph-bold text-primary">
                     + Add to Cart
                 </Text>
