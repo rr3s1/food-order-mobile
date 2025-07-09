@@ -55,7 +55,7 @@ console.log("USER:", JSON.stringify(user, null, 2  ));
                         <View className="flex-start">
                             <Text className="small-bold text-primary">DELIVER TO</Text>
                             <TouchableOpacity className="flex-center flex-row gap-x-1 mt-0.5">
-                                <Text className="paragraph-bold text-dark-100">London UK</Text>
+                                <Text className="paragraph-bold text-dark-100">Your HQ</Text>
                                 <Image source={images.arrowDown} className="size-3" resizeMode="contain" />
                             </TouchableOpacity>
                         </View>
